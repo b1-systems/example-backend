@@ -124,7 +124,8 @@ func main() {
           http.Error(w, "Bad request", http.StatusBadRequest)
         } else {
           w.Write([]byte(fmt.Sprintf(
-            "Client %s parsed claims from verified ID token: exp = %s, aud = %s, email = %s, email_verified = %t",
+            "--------%s--------\r\n" +
+            "Parsed claims from verified ID token: exp = %s, aud = %s, email = %s, email_verified = %t\r\n",
             clientID,
             time.Unix(claims.Expires, 0).UTC(),
             claims.Audience,
