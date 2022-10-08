@@ -1,6 +1,7 @@
 package main
 
 import (
+  "errors"
   "fmt"
   "log"
   "net/http"
@@ -21,6 +22,21 @@ var (
   listenAddress = ""
 )
 
+type ref struct {
+  name string
+  value *string
+}
+
+func (r ref) readValue(cs *ini.Section) error {
+  *r.value = cs.Key(r.name).String()
+
+  if *r.value == "" {
+    return errors.New(fmt.Sprintf("No value for name %s", r.name))
+  } else {
+    return nil
+  }
+}
+
 func readIni() {
   ex, err := os.Executable()
 
@@ -36,45 +52,28 @@ func readIni() {
 
   cs := cfg.Section(clientName)
 
-  clientID = cs.Key("clientID").String()
+  arr := [...]ref{
+    {"clientID", &clientID},
+    {"clientSecret", &clientSecret},
+    {"providerUrl", &providerUrl},
+    {"listenAddress", &listenAddress}}
 
-  if clientID == "" {
-    log.Fatal(clientName + ".ini does not specify clientID")
-    os.Exit(1)
+  for _, r := range arr {
+    if err := r.readValue(cs) ; err != nil {
+      log.Fatal(fmt.Sprintf("Could not read value of %s", r.name))
+      os.Exit(1)
+    } else {
+      var value string
+
+      if r.name == "clientSecret" {
+        value = "*REDACTED*"
+      } else {
+        value = *r.value
+      }
+
+      log.Printf("%s = %s\n", r.name, value);
+    }
   }
-
-  clientSecret = cs.Key("clientSecret").String()
-
-  if clientSecret == "" {
-    log.Fatal(clientName + ".ini does not specify clientSecret")
-    os.Exit(1)
-  }
-
-  providerUrl = cs.Key("providerUrl").String()
-
-  if providerUrl == "" {
-    log.Fatal(clientName + ".ini does not specify providerUrl")
-    os.Exit(1)
-  }
-
-  listenAddress = cs.Key("listenAddress").String()
-
-  if listenAddress == "" {
-    log.Fatal(clientName + ".ini does not specify listenAddress")
-    os.Exit(1)
-  }
-
-  log.Printf(
-    "Read configuration:\n" +
-    " clientID = %s\n" +
-    " clientSecret = %s\n" +
-    " providerUrl = %s\n" +
-    " listenAddress = %s\n",
-    clientID,
-    "*REDACTED*",
-    providerUrl,
-    listenAddress,
-  )
 }
 
 func main() {
