@@ -59,7 +59,6 @@ func main() {
       http.Error(w, "Bad request", http.StatusBadRequest)
     } else {
       id_token := strings.TrimPrefix(auth_header, "Bearer ")
-
       idToken, err := verifier.Verify(ctx, id_token)
 
       if err != nil {
@@ -67,10 +66,29 @@ func main() {
         http.Error(w, "Internal server error", http.StatusInternalServerError)
       } else {
         var claims struct {
-          Expires int64 `json:"exp"`
-          Audience []string `json:"aud"`
+          Exp int64 `json:"exp"`
+          Aud []string `json:"aud"`
+          Sub string `json:"sub"`
+          AuthTime int `json:"auth_time"`
+          SessionState string `json:"session_state"`
+          Acr string `json:"acr"`
+          RealmAccess struct {
+            Roles []string `json:"roles"`
+          } `json:"realm_access"`
+          ResourceAccess struct {
+            ExampleFrontend struct {
+              Roles []string `json:"roles"`
+            } `json:"example-frontend"`
+          } `json:"resource_access"`
+          Scope string `json:"scope"`
+          EmailVerified bool `json:"email_verified"`
+          Address struct {
+          } `json:"address"`
+          Name string `json:"name"`
+          PreferredUsername string `json:"preferred_username"`
+          GivenName string `json:"given_name"`
+          FamilyName string `json:"family_name"`
           Email string `json:"email"`
-          Verified bool `json:"email_verified"`
         }
 
         if err := idToken.Claims(&claims); err != nil {
@@ -79,12 +97,20 @@ func main() {
         } else {
           w.Write([]byte(fmt.Sprintf(
             "--------%s--------\r\n" +
-            "Parsed claims from verified ID token: exp = %s, aud = %s, email = %s, email_verified = %t\r\n",
+            "Parsed claims from verified ID token (excerpt):\r\n" +
+            " * exp = %s\r\n" +
+            " * aud = %s\r\n" +
+            " * email = %s\r\n" +
+            " * name = %s\r\n" +
+            " * preferred_username = %s\r\n" +
+            " * resource_access.example-frontend.roles = %s\r\n",
             clientID,
-            time.Unix(claims.Expires, 0).UTC(),
-            claims.Audience,
+            time.Unix(claims.Exp, 0).UTC(),
+            claims.Aud,
             claims.Email,
-            claims.Verified)))
+            claims.Name,
+            claims.PreferredUsername,
+            claims.ResourceAccess.ExampleFrontend.Roles)))
         }
       }
     }
