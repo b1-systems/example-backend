@@ -1,17 +1,15 @@
 package main
 
 import (
-  "errors"
   "fmt"
   "log"
   "net/http"
   "os"
-  "path/filepath"
   "strings"
   "time"
   "github.com/coreos/go-oidc/v3/oidc"
   "golang.org/x/net/context"
-  "gopkg.in/ini.v1"
+  "example-backend/ini"
 )
 
 var (
@@ -22,62 +20,19 @@ var (
   listenAddress = ""
 )
 
-type ref struct {
-  name string
-  value *string
-}
-
-func (r ref) readValue(cs *ini.Section) error {
-  *r.value = cs.Key(r.name).String()
-
-  if *r.value == "" {
-    return errors.New(fmt.Sprintf("No value for name %s", r.name))
-  } else {
-    return nil
-  }
-}
-
-func readIni() {
-  ex, err := os.Executable()
-
-  if err != nil {
-    panic(err)
-  }
-
-  cfg, err := ini.Load(filepath.Join(filepath.Dir(ex), clientName + ".ini"))
-
-  if err != nil {
-    panic(err)
-  }
-
-  cs := cfg.Section(clientName)
-
-  arr := [...]ref{
+func main() {
+  arr := []ini.Ref{
     {"clientID", &clientID},
     {"clientSecret", &clientSecret},
     {"providerUrl", &providerUrl},
     {"listenAddress", &listenAddress}}
 
-  for _, r := range arr {
-    if err := r.readValue(cs) ; err != nil {
-      log.Fatal(fmt.Sprintf("Could not read value of %s", r.name))
-      os.Exit(1)
-    } else {
-      var value string
+  err := ini.ReadIni(clientName, arr)
 
-      if r.name == "clientSecret" {
-        value = "*REDACTED*"
-      } else {
-        value = *r.value
-      }
-
-      log.Printf("%s = %s\n", r.name, value);
-    }
+  if err != nil {
+    log.Fatal()
+    os.Exit(1)
   }
-}
-
-func main() {
-  readIni()
 
   ctx := context.Background()
   provider, err := oidc.NewProvider(ctx, providerUrl)
