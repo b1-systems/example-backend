@@ -29,7 +29,7 @@ clientID = example-backend
 clientSecret = secret
 
 # This URL will be used for endpoint discovery of your IdP
-providerUrl = https://example.test/keycloak/realms/golang-oidc
+providerUrl = https://your_idp_server/realms/golang-oidc
 
 # Plain HTTP service address of this "example-frontend" server:
 listenAddress = 0.0.0.0:8080
