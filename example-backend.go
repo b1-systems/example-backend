@@ -17,7 +17,6 @@ import (
 var (
   clientName = "example-backend"
   clientID = ""
-  clientSecret = ""
   providerUrl = ""
   listenAddress = ""
 )
@@ -25,7 +24,6 @@ var (
 func main() {
   arr := []ini.Ref{
     {"clientID", &clientID},
-    {"clientSecret", &clientSecret},
     {"providerUrl", &providerUrl},
     {"listenAddress", &listenAddress}}
 

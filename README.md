@@ -54,11 +54,10 @@ Example `example-backend.ini`:
 
 ```
 [example-backend]
-# These values are provided by your IdP for your confidential client
+# Client ID as set in Keycloak:
 clientID = example-backend
-clientSecret = secret
 
-# This URL will be used for endpoint discovery of your IdP
+# This URL will be used for endpoint discovery of your IdP:
 providerUrl = https://your_idp_server/realms/golang-oidc
 
 # Plain HTTP service address of this "example-frontend" server:
