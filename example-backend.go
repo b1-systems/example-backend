@@ -1,3 +1,5 @@
+/* Demonstration of passing an OpenID Connect ID Token to a web application via Authorization header. */
+
 package main
 
 import (
