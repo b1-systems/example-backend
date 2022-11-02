@@ -1,3 +1,9 @@
+/* author: B1 Systems GmbH
+ * authoremail: info@b1-systems.de
+ * license: MIT License <https://opensource.org/licenses/MIT>
+ * summary: OpenID Connect example
+ * */
+
 /* Demonstration of passing an OpenID Connect ID Token to a web application via Authorization header. */
 
 package main
