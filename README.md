@@ -14,13 +14,13 @@ Demonstration of passing an OpenID Connect ID Token to a web application via Aut
 ## Requirements
 
 "example-frontend" should be up and running.
-* See also <https://tk-sls.de/gitlab/golang-oidc/example-frontend/>.
+* See also <https://github.com/b1-systems/example-frontend/>.
 * *Note:* Keycloak client "example-frontend" should exist; this will become relevant in section "Configuration", step 2 (see below).
 
 ## Installation
 
 ```bash
-git clone https://tk-sls.de/gitlab/golang-oidc/example-backend.git
+git clone https://github.com/b1-systems/example-backend.git
 cd example-backend
 go mod tidy
 go build
