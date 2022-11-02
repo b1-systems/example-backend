@@ -71,3 +71,8 @@ systemctl start example-backend.service
 journalctl -xefu  example-backend.service
 ```
 
+## Author, Copyright and License
+
+* Copyright: 2022 B1 Systems GmbH <info@b1-systems.de>
+* Author: Tilman Kranz <tilman.kranz@b1-systems.de>
+* License: MIT License <https://opensource.org/licenses/MIT>
