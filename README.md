@@ -60,7 +60,7 @@ clientID = example-backend
 # This URL will be used for endpoint discovery of your IdP:
 providerUrl = https://your_idp_server/realms/golang-oidc
 
-# Plain HTTP service address of this "example-frontend" server:
+# Plain HTTP service address of this "example-backend" server:
 listenAddress = 0.0.0.0:8080
 ```
 
@@ -71,8 +71,22 @@ systemctl start example-backend.service
 journalctl -xefu  example-backend.service
 ```
 
+## Start using Docker
+
+```shell
+docker build --tag example-backend .
+docker run \
+  --rm \
+  --name example-backend \
+  -e CLIENT_ID=some-name \
+  -e PROVIDER_URL=https://some.provider/url \
+  -e LISTEN_ADDRESS=0.0.0.0:8080 \
+  --publish 8080:8080 \
+  example-backend
+```
+
 ## Author, Copyright and License
 
-* Copyright: 2022 B1 Systems GmbH <info@b1-systems.de>
-* Author: Tilman Kranz <tilman.kranz@b1-systems.de>
+* Copyright: 2022-2026 B1 Systems GmbH <info@b1-systems.de>
+* Author: Tilman Kranz <kranz@b1-systems.de>
 * License: MIT License <https://opensource.org/licenses/MIT>
