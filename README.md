@@ -61,7 +61,7 @@ clientID = example-backend
 providerUrl = https://your_idp_server/realms/golang-oidc
 
 # Plain HTTP service address of this "example-backend" server:
-listenAddress = 0.0.0.0:8080
+listenAddress = 0.0.0.0:8081
 ```
 
 # Start
@@ -80,8 +80,8 @@ docker run \
   --name example-backend \
   -e CLIENT_ID=some-name \
   -e PROVIDER_URL=https://some.provider/url \
-  -e LISTEN_ADDRESS=0.0.0.0:8080 \
-  --publish 8080:8080 \
+  -e LISTEN_ADDRESS=0.0.0.0:8081 \
+  --publish 8081:8081 \
   example-backend
 ```
 

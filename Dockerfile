@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM golang:1.26 AS build-stage
 WORKDIR /app
 COPY example-backend.go go.mod go.sum ./
@@ -7,8 +9,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /example-backend
 
 FROM scratch AS release-stage
 COPY --from=build-stage /example-backend /example-backend
+COPY --from=build-stage /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY example-backend.ini.sample /example-backend.ini
 ENTRYPOINT ["/example-backend"]
 ENV CLIENT_ID=example-backend
 ENV PROVIDER_URL=
-ENV LISTEN_ADDRESS=0.0.0.0:8080
+ENV LISTEN_ADDRESS=0.0.0.0:8081
