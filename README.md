@@ -85,6 +85,28 @@ docker run \
   example-backend
 ```
 
+## Start using Compose
+
+Create a file `docker-compose.yml`:
+
+```yaml
+services:
+   example-backend:
+     image: example-backend:latest
+     ports:
+       - "9116:8081"
+     environment:
+       CLIENT_ID: example-backend
+       PROVIDER_URL: https://your_idp_url/realms/golang-oidc
+       LISTEN_ADDRESS: 0.0.0.0:8081
+```
+
+Run the service `example-backend`:
+
+```shell
+docker compose -f docker-compose.yml up
+```
+
 ## Author, Copyright and License
 
 * Copyright: 2022-2026 B1 Systems GmbH <info@b1-systems.de>
